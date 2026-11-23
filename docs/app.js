@@ -28,7 +28,7 @@
       return;
     }
     try {
-      const res = await fetch('/api/health', { cache: 'no-store' });
+      const res = await fetch('api/health', { cache: 'no-store' });
       const isJson = (res.headers.get('content-type') || '').includes('application/json');
       backendMode = res.ok && isJson ? 'server' : 'browser';
     } catch {
@@ -43,7 +43,7 @@
     const headers = {};
     if (body !== undefined) headers['Content-Type'] = 'application/json';
     if (state.token) headers.Authorization = `Bearer ${state.token}`;
-    const res = await fetch(`/api${path}`, {
+    const res = await fetch(`api${path}`, {
       method,
       headers,
       body: body !== undefined ? JSON.stringify(body) : undefined,
