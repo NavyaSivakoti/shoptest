@@ -1,0 +1,14 @@
+{
+  "name": "shoptest-ecommerce",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Basic e-commerce web app for test automation: login, cart, checkout and receipts",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/api.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
