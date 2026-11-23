@@ -15,7 +15,7 @@ const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const PUBLIC_DIR = path.join(__dirname, 'public');
+const PUBLIC_DIR = path.join(__dirname, 'docs');
 const PORT = Number(process.env.PORT) || 3000;
 
 const TAX_RATE_BASIS_POINTS = 800; // 8.00%

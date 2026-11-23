@@ -18,7 +18,28 @@
     String(value ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const fmtDate = (iso) => new Date(iso).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
 
+  // 'server' when the Node server answers /api, otherwise 'browser' (e.g. GitHub Pages).
+  // Add ?mode=browser to the URL to force the browser backend.
+  let backendMode = 'server';
+
+  async function detectBackend() {
+    if (new URLSearchParams(location.search).get('mode') === 'browser') {
+      backendMode = 'browser';
+      return;
+    }
+    try {
+      const res = await fetch('/api/health', { cache: 'no-store' });
+      const isJson = (res.headers.get('content-type') || '').includes('application/json');
+      backendMode = res.ok && isJson ? 'server' : 'browser';
+    } catch {
+      backendMode = 'browser';
+    }
+  }
+
   async function api(method, path, body) {
+    if (backendMode === 'browser') {
+      return window.LocalBackend.request(method, path, body, state.token);
+    }
     const headers = {};
     if (body !== undefined) headers['Content-Type'] = 'application/json';
     if (state.token) headers.Authorization = `Bearer ${state.token}`;
@@ -565,6 +586,7 @@
   window.addEventListener('hashchange', route);
 
   (async () => {
+    await detectBackend();
     await loadSession();
     await refreshCart();
     renderNav();

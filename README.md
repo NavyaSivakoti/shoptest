@@ -23,6 +23,16 @@ npm test
 
 Set a different port with `PORT=4000 npm start`.
 
+### Live site (GitHub Pages)
+
+The site is published from the `docs/` folder: https://navyasivakoti.github.io/shoptest/
+
+On Pages there is no Node server, so the app switches to a **browser backend** (`docs/local-backend.js`). It implements the same API and rules, and stores data in the browser's localStorage. Each browser has its own accounts, cart and orders, and the demo accounts are seeded automatically.
+
+The app picks the backend on load: if `/api/health` answers, it uses the Node server; otherwise it uses the browser backend. To force the browser backend locally, open `http://localhost:3000/?mode=browser`.
+
+Layout: `docs/` holds the whole frontend and is served by `server.js` as well as Pages. `server.js` and `test/` are the Node side.
+
 ## Test accounts
 
 | Email | Password | Notes |
@@ -94,6 +104,7 @@ Errors return `{ "error": "message" }`. Validation errors also include `fieldErr
 
 ## Notes
 
-- Data is kept in memory. Restarting the server resets everything, and `POST /api/test/reset` does the same without a restart.
+- With the Node server, data is kept in memory. Restarting the server resets everything, and `POST /api/test/reset` does the same without a restart.
+- With the browser backend (GitHub Pages), data is kept in the browser's localStorage. Clear site data to reset it.
 - Passwords are hashed with scrypt. This is a test app, so there is no email verification, rate limiting or real payment processing.
 - Do not use this code as a base for a production shop without adding real security, persistence and payment integration.
